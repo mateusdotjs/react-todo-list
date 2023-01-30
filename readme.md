@@ -1,4 +1,4 @@
 # ReactJS Todo List App
 
-Todo list project using ReactJS.
-Live demo --> https://mateusdotjs.github.io/react-todo-list/
+Todo list project using ReactJS.<br />
+Live demo --> https://harmonious-semolina-50b543.netlify.app/
