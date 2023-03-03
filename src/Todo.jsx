@@ -1,91 +1,87 @@
-import React from 'react'
+import React from "react";
 
-const Todo = ({ todos, removeTodo, completeTodo, toggleEditMode, editTodo }) => {
+const Todo = ({ todo, removeTodo, completeTodo, toggleEditMode, editTodo }) => {
+  const [input, setInput] = React.useState("");
 
-    const [input, setInput] = React.useState("")
+  function handleCancelClick(id) {
+    setInput("");
+    toggleEditMode(id);
+  }
 
-    function handleCancelClick(id) {
-        setInput("")
-        toggleEditMode(id)
-    }
+  function handleEditClick(id, text) {
+    if (text === "") return;
+    editTodo(id, text);
+    setInput("");
+  }
 
-    function handleEditClick(id, text) {
-        if (text === "") return
-        editTodo(id, text)
-        setInput("")
-    }
+  function handleToggleClick(id) {
+    setInput("");
+    toggleEditMode(id);
+  }
 
-    function handleToggleClick(id) {
-        setInput("")
-        toggleEditMode(id)
-    }
+  const textColor = todo.isCompleted ? "text-gray-400" : "text-black";
+  const text = todo.isCompleted ? <s>{todo.text}</s> : todo.text;
+  const checkButtonBg = todo.isCompleted ? "bg-orange-400" : "bg-green-500";
+  const checkButtonText = todo.isCompleted ? "Undo" : "Check";
 
-    return (
-        <>
-            {
-                todos.map((todo) =>
-                    todo.isEditing ?
-                        (<li
-                            className="w-100 list-group-item d-flex flex-row 
-                            align-items-center justify-content-between flex-wrap 
-                            pl-3 pr-2 py-3"
-                            key={todo.id}>
-                            <div className='col-12 col-md-9 mb-2 mb-md-0'>
-                                <input
-                                    type="text"
-                                    onChange={(e) => setInput(e.target.value)}
-                                    value={input}
-                                    className='form-control'
-                                />
-                            </div>
-                            <div className='col-12 col-md-3 d-flex justify-content-evenly'>
-                                <button
-                                    className='btn btn-danger col-5'
-                                    onClick={() => handleCancelClick(todo.id)}>
-                                    Cancel
-                                </button>
-                                <button
-                                    className='btn btn-success col-5'
-                                    onClick={() => handleEditClick(todo.id, input)}>
-                                    Confirm
-                                </button>
-                            </div>
-                        </li>)
-                        :
-                        (<li
-                            className="col-12 list-group-item d-flex flex-row 
-                            align-items-center justify-content-center 
-                            flex-wrap pl-3 pr-2 py-3"
-                            key={todo.id}>
-                            <p
-                                className={`col-12 col-md-7 mb-2 mb-md-0 text-center 
-                                text-md-start overflow-hidden 
-                                ${todo.isCompleted ? "text-muted" : ""}`}>
-                                {todo.isCompleted ? <s>{todo.text}</s> : todo.text}
-                            </p>
-                            <div className='col-12 col-md-5 d-flex justify-content-evenly'>
-                                <button
-                                    className={`btn ${todo.isCompleted ? "btn-warning" : "btn-success"} col-3`}
-                                    onClick={() => completeTodo(todo.id)}>
-                                    {todo.isCompleted ? "Undo" : "Check"}
-                                </button>
-                                <button
-                                    className="btn btn-secondary col-3"
-                                    disabled={todo.isCompleted ? true : false}
-                                    onClick={() => handleToggleClick(todo.id)}>
-                                    Edit
-                                </button>
-                                <button
-                                    className="btn btn-danger col-3"
-                                    onClick={() => removeTodo(todo.id)}>
-                                    Delete
-                                </button>
-                            </div>
-                        </li>)
-                )
-            }
-        </>
-    )
-}
+  return todo.isEditing ? (
+    <li className="flex h-32 w-full flex-col items-center justify-center rounded border-2 border-gray-400 bg-white p-2 shadow-md transition-all duration-300 hover:shadow-lg md:w-[500px]">
+      <div className="flex h-1/2 w-full items-center">
+        <input
+          className="h-10 w-full border-2 border-gray-200 pl-2 outline-none"
+          type="text"
+          onChange={(e) => setInput(e.target.value)}
+          value={input}
+        />
+      </div>
+      <div className="flex h-1/2 w-full items-center justify-center gap-3">
+        <button
+          className="rounded bg-red-500 px-2 py-1 font-semibold text-white"
+          onClick={() => handleCancelClick(todo.id)}
+        >
+          Cancel
+        </button>
+        <button
+          className="rounded bg-green-500 px-2 py-1 font-semibold text-white"
+          onClick={() => handleEditClick(todo.id, input)}
+        >
+          Confirm
+        </button>
+      </div>
+    </li>
+  ) : (
+    <li className="flex h-32 w-full flex-col items-center justify-center rounded border-2 border-gray-400 bg-white p-2 shadow-md transition-all duration-300 hover:shadow-lg md:w-[500px]">
+      <p
+        className={`mb-1 flex h-2/3 w-full max-w-full items-center justify-center break-all text-center ${textColor}`}
+      >
+        {text}
+      </p>
 
-export default Todo
+      <div className="flex h-1/3 w-full items-center gap-5 px-5">
+        <button
+          className={`w-1/3 rounded p-1 font-semibold text-white ${checkButtonBg}`}
+          onClick={() => completeTodo(todo.id)}
+        >
+          {checkButtonText}
+        </button>
+
+        <button
+          className="w-1/3 rounded bg-yellow-500 py-1 px-2 font-semibold text-white disabled:bg-gray-400 disabled:opacity-75"
+          disabled={todo.isCompleted ? true : false}
+          onClick={() => handleToggleClick(todo.id)}
+        >
+          Edit
+        </button>
+
+        <button
+          className="w-1/3 rounded bg-red-500 p-1 font-semibold text-white"
+          onClick={() => removeTodo(todo.id)}
+        >
+          Delete
+        </button>
+      </div>
+    </li>
+  );
+};
+
+export default Todo;
